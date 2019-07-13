@@ -116,10 +116,27 @@ for j in range(0, len(onlyfiles)):
                         z = mocap.frame_joint_channel(
                             i, bvhBoneName(deepMimicHumanoidJoints[p]), 'Zrotation')
 
-                        # bindings from blender test
-                        pitch = x
-                        yaw = y
-                        roll = z
+                        if deepMimicHumanoidJoints[p] == "right shoulder":
+                            pitch = x
+                            yaw = y
+                            roll = z - 90
+                        elif deepMimicHumanoidJoints[p] == "left shoulder":
+                            pitch = x
+                            yaw = y
+                            roll = z + 90
+                        elif deepMimicHumanoidJoints[p] == "right hip":
+                            pitch = x
+                            yaw = y
+                            roll = z - 21
+                        elif deepMimicHumanoidJoints[p] == "left hip":
+                            pitch = x
+                            yaw = y
+                            roll = z + 21
+                        else:
+                            # bindings from blender test
+                            pitch = x
+                            yaw = y
+                            roll = z
 
                         quaternion = euler_to_quaternion(math.radians(
                             yaw), math.radians(pitch), math.radians(roll))
