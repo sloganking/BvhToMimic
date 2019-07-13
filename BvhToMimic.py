@@ -8,6 +8,7 @@ import json
 import os
 from os import listdir
 from os.path import isfile, join
+from tqdm import tqdm
 
 # Function declarations
 # ===========================================================================
@@ -81,7 +82,7 @@ for j in range(0, len(onlyfiles)):
             mocap = Bvh(f.read())
 
             # For every keyFrame
-            for i in range(0, mocap.nframes):
+            for i in tqdm(range(0, mocap.nframes)):
                 keyFrame = []
 
                 # for all DeepMimicHumanoid Joints
