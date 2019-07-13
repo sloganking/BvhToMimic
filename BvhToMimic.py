@@ -81,6 +81,7 @@ for j in range(0, len(onlyfiles)):
         with open("./inputBvh/" + onlyfiles[j]) as f:
             mocap = Bvh(f.read())
 
+            print("Converting:\t\"" + onlyfiles[j] + "\"")
             # For every keyFrame
             for i in tqdm(range(0, mocap.nframes)):
                 keyFrame = []
@@ -106,8 +107,13 @@ for j in range(0, len(onlyfiles)):
                                 i, bvhBoneName(deepMimicHumanoidJoints[p]), 'Zposition'))
 
                     elif dimensions[p] == 1:
-                        keyFrame.append(math.radians(mocap.frame_joint_channel(
-                            i, bvhBoneName(deepMimicHumanoidJoints[p]), 'Xrotation')))
+
+                        x = mocap.frame_joint_channel(
+                            i, bvhBoneName(deepMimicHumanoidJoints[p]), 'Xrotation')
+
+                        x = -x
+
+                        keyFrame.append(math.radians(x))
 
                     elif dimensions[p] == 4:
                         x = mocap.frame_joint_channel(
@@ -138,6 +144,11 @@ for j in range(0, len(onlyfiles)):
                             pitch = x
                             yaw = y
                             roll = z
+
+                        # filter which accounts for differences in mimic interpretation
+                        pitch = -pitch     # x non inverted
+                        yaw = yaw       # y inverted on blender
+                        roll = roll      # z non inverted
 
                         quaternion = euler_to_quaternion(math.radians(
                             yaw), math.radians(pitch), math.radians(roll))
