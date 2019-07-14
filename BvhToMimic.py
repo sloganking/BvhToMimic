@@ -73,7 +73,7 @@ for j in range(0, len(onlyfiles)):
 
         # File Header
         print(f"{{", file=output)
-        print(f"\"Loop\": \"none\",", file=output)
+        print(f"\"Loop\": \"wrap\",", file=output)
         print(f"\"Frames\":", file=output)
         print(f"[", file=output)
 
@@ -110,10 +110,26 @@ for j in range(0, len(onlyfiles)):
 
                         x = mocap.frame_joint_channel(
                             i, bvhBoneName(deepMimicHumanoidJoints[p]), 'Xrotation')
+                        y = mocap.frame_joint_channel(
+                            i, bvhBoneName(deepMimicHumanoidJoints[p]), 'Yrotation')
+                        z = mocap.frame_joint_channel(
+                            i, bvhBoneName(deepMimicHumanoidJoints[p]), 'Zrotation')
 
-                        x = -x
-
-                        keyFrame.append(math.radians(x))
+                        if deepMimicHumanoidJoints[p] == "right elbow":
+                            x = -x
+                            y = y
+                            z = -z
+                            keyFrame.append(math.radians(y))
+                        elif deepMimicHumanoidJoints[p] == "left elbow":
+                            x = -x
+                            y = -y
+                            z = -z
+                            keyFrame.append(math.radians(y))
+                        else:
+                            x = -x
+                            y = -y
+                            z = -z
+                            keyFrame.append(math.radians(x))
 
                     elif dimensions[p] == 4:
                         x = mocap.frame_joint_channel(
@@ -124,11 +140,11 @@ for j in range(0, len(onlyfiles)):
                             i, bvhBoneName(deepMimicHumanoidJoints[p]), 'Zrotation')
 
                         if deepMimicHumanoidJoints[p] == "right shoulder":
-                            pitch = x
+                            pitch = -x + 30
                             yaw = y
                             roll = z - 90
                         elif deepMimicHumanoidJoints[p] == "left shoulder":
-                            pitch = x
+                            pitch = -x + 30
                             yaw = y
                             roll = z + 90
                         elif deepMimicHumanoidJoints[p] == "right hip":
