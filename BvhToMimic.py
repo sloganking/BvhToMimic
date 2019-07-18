@@ -9,6 +9,7 @@ import os
 from os import listdir
 from os.path import isfile, join
 from tqdm import tqdm
+from gpcharts import figure
 
 # Function declarations
 # ===========================================================================
@@ -68,6 +69,7 @@ onlyfiles = [f for f in listdir(mypath) if isfile(join(mypath, f))]
 
 # for all files to convert
 for j in range(0, len(onlyfiles)):
+    elbowXYZPlot = []
 
     with open(f"./OutputMimic/{onlyfiles[j]}.txt", "w") as output:
 
@@ -116,6 +118,7 @@ for j in range(0, len(onlyfiles)):
                             i, bvhBoneName(deepMimicHumanoidJoints[p]), 'Zrotation')
 
                         if deepMimicHumanoidJoints[p] == "right elbow":
+                            elbowXYZPlot.append([x, y, z])
                             x = -x
                             y = y
                             z = -z
@@ -192,3 +195,6 @@ for j in range(0, len(onlyfiles)):
             # Close JSON object
             print(f"]", file=output)
             print(f"}}", file=output)
+
+    fig1 = figure()
+    fig1.plot(elbowXYZPlot)

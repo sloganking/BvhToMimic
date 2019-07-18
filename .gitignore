@@ -1,6 +1,11 @@
 #output files
 OutputMimic/
 
+#input files
+InputBvh/
+
+*.html
+
 # python
 __pycache__/
 *.pyc
