@@ -69,7 +69,8 @@ onlyfiles = [f for f in listdir(mypath) if isfile(join(mypath, f))]
 
 # for all files to convert
 for j in range(0, len(onlyfiles)):
-    elbowXYZPlot = []
+    elbowXYZPlot = [["x", "y", "z"]]
+    targetMimicJoint = "right hip"
 
     with open(f"./OutputMimic/{onlyfiles[j]}.txt", "w") as output:
 
@@ -90,6 +91,18 @@ for j in range(0, len(onlyfiles)):
 
                 # for all DeepMimicHumanoid Joints
                 for p in range(0, len(deepMimicHumanoidJoints)):
+
+                    # grab joint data for graphing
+                    if deepMimicHumanoidJoints[p] == targetMimicJoint:
+                        x = mocap.frame_joint_channel(
+                            i, bvhBoneName(deepMimicHumanoidJoints[p]), 'Xrotation')
+                        y = mocap.frame_joint_channel(
+                            i, bvhBoneName(deepMimicHumanoidJoints[p]), 'Yrotation')
+                        z = mocap.frame_joint_channel(
+                            i, bvhBoneName(deepMimicHumanoidJoints[p]), 'Zrotation')
+
+                        elbowXYZPlot.append([x, y, z])
+
                     # Append Time
                     if p == 0:
                         keyFrame.append(mocap.frame_time)
@@ -118,7 +131,6 @@ for j in range(0, len(onlyfiles)):
                             i, bvhBoneName(deepMimicHumanoidJoints[p]), 'Zrotation')
 
                         if deepMimicHumanoidJoints[p] == "right elbow":
-                            elbowXYZPlot.append([x, y, z])
                             x = -x
                             y = y
                             z = -z
@@ -200,5 +212,6 @@ for j in range(0, len(onlyfiles)):
             print(f"]", file=output)
             print(f"}}", file=output)
 
-    fig1 = figure()
+    fig1 = figure(title=targetMimicJoint+" axis values in " +
+                  onlyfiles[j], ylabel="axis value", xlabel="keyframes")
     fig1.plot(elbowXYZPlot)
