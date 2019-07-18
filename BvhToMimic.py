@@ -142,7 +142,11 @@ for j in range(0, len(onlyfiles)):
                         z = mocap.frame_joint_channel(
                             i, bvhBoneName(deepMimicHumanoidJoints[p]), 'Zrotation')
 
-                        if deepMimicHumanoidJoints[p] == "right shoulder":
+                        if deepMimicHumanoidJoints[p] == "hip" and posLocked:
+                            pitch = 0
+                            yaw = 0
+                            roll = 0
+                        elif deepMimicHumanoidJoints[p] == "right shoulder":
                             pitch = -x + 30
                             yaw = y
                             roll = z - 90
