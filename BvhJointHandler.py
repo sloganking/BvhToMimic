@@ -77,6 +77,8 @@ class BvhJointHandler:
         # Order is important
         self.deepMimicHumanoidJoints = ["seconds", "hip", "hip", "chest", "neck", "right hip", "right knee", "right ankle",
                                         "right shoulder", "right elbow", "left hip", "left knee", "left ankle", "left shoulder", "left elbow"]
+        self.kneeJoints = [self.deepMimicHumanoidJoints[6], self.deepMimicHumanoidJoints[11]]
+        self.elbowJoints = [self.deepMimicHumanoidJoints[9], self.deepMimicHumanoidJoints[14]]
 
         self.jointDimensions = [1, 3, 4, 4, 4, 4, 1, 4, 4, 1, 4, 1, 4, 4, 1]
 
@@ -202,6 +204,13 @@ class BvhJointHandler:
                 frameNumber, jointInfo.bvhName, channel))
 
         # Calculate joint rotations
+        rotation = self.eulerToQuat(eulerAngles, channels)
+        rotation = JointInfo.quatBvhToDM(rotation)
+
+        offset = jointInfo.offsetQuat
+        
+        result = offset * rotation
+
         if jointInfo.dimensions > 1:
             # 4D (quaternion) DeepMimic joint
             rotation = self.eulerToQuat(eulerAngles, channels)
@@ -214,8 +223,14 @@ class BvhJointHandler:
         else:
             # 1D DeepMimic joint
             assert jointInfo.dimensions == 1
-            # TODO: calculate this angle correctly (keep all DOF's into account)
-            return [-math.radians(eulerAngles[0])]
+            # TODO: move the upper joint accordingly, so that the elbow or knee joint points in the right direction
+            # Return the total quaternion angle (this is not taking bvh "offset" quat into account)
+            # Knee rotation is always negative in original DeepMimic motion files
+            if jointInfo.deepMimicName in self.kneeJoints:
+                return [-rotation.angle]
+            # while the elbow rotations are positive! (Hooray for consistency.)
+            else:
+                return[rotation.angle]
 
     def eulerToQuat(self, angles: List[float], channels: List[str]):
         # Convert angles to radians
