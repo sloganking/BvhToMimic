@@ -166,8 +166,13 @@ class BvhJointHandler:
             )
 
         # Append hip rotation
+        if self.posLocked:
+            hip_rotation = Quaternion().elements
+        else:
+            hip_rotation = self.getJointRotation(frameNumber, self.jointData[0])
+
         result.extend(
-            self.getJointRotation(frameNumber, self.jointData[0])
+            hip_rotation
         )
 
         # Append other rotations
