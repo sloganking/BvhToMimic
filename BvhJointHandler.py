@@ -60,6 +60,14 @@ class JointInfo:
             -quaternion[1]
         )
 
+    @staticmethod
+    def posBvhToDM(translation: List[float]) -> List[float]:
+        # transform x -> z and z -> -x
+        return [
+            translation[2],
+            translation[1],
+            translation[0]
+        ]
 
 class BvhJointHandler:
     """ Handles conversion of BVH files to DeepMimic format.
@@ -151,8 +159,10 @@ class BvhJointHandler:
         if self.posLocked:
             result.extend([2, 2, 2])
         else:
+            # Transform to DM frame
+            translation = JointInfo.posBvhToDM(translation)
             result.extend(
-                self.getJointTranslation(frameNumber, self.jointData[0])
+                translation
             )
 
         # Append hip rotation
