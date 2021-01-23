@@ -10,7 +10,7 @@ The [DeepMimic project](https://github.com/xbpeng/DeepMimic) currently offers no
 
 ## Related Projects
 
-[List of related projects](https://github.com/SleepingFox88/DeepMimic-Animation-Conversion)
+[List of related projects](https://github.com/sloganking/DeepMimic-Animation-Conversion)
 
 ## Progress so far
 
@@ -18,7 +18,7 @@ The [DeepMimic project](https://github.com/xbpeng/DeepMimic) currently offers no
 
 ### [experimental] manual offset test:
 
-[link to branch](https://github.com/SleepingFox88/BvhToMimic/tree/manual-offset-experimentation)
+[link to branch](https://github.com/sloganking/BvhToMimic/tree/manual-offset-experimentation)
 
 ![manualOffsetTest](./Assets/manualOffsetTest.gif)
 
